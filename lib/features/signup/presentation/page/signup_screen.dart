@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manage_task/features/common/common_container.dart';
 import 'package:manage_task/features/common/ontap_animation.dart';
+import 'package:manage_task/features/common/utils.dart';
 import 'package:manage_task/features/login/presentation/page/login_screen.dart';
 import 'package:manage_task/features/signup/presentation/blocs/signup/signup_bloc.dart';
 import 'package:manage_task/features/signup/presentation/widgets/custom_text_field.dart';
+import 'package:manage_task/features/user_data/presentation/blocs/user_data/user_data_bloc.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -22,11 +24,22 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordController = TextEditingController();
 
   @override
+  void initState() {
+    context.read<UserDataBloc>().add(ResetFetchUserDataEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: BlocConsumer<SignupBloc, SignupState>(
         listener: (context, state) {
+          if (state is SignupFailure) {
+            ToastHandler().showErrorToast(
+              "Something went wrong with status code ${state.statusCode}",
+            );
+          }
           if (state is SignupSuccess) {
             Navigator.push(
               context,

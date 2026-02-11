@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<LogoutBloc, LogoutState>(
       builder: (context, state) {
+        log("Logout State in Home Screen => $state");
         if (state is LogoutSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             Navigator.of(context).pushAndRemoveUntil(
@@ -62,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: BlocConsumer<UserDataBloc, UserDataState>(
                   listener: (context, state) {},
                   builder: (context, state) {
+                    log("User Data State ==> $state");
                     if (state is UserDataFailure && state.statusCode == 401) {
                       log("Refresh Token ==>Trigger");
                       context.read<RefreshTokenBloc>().add(

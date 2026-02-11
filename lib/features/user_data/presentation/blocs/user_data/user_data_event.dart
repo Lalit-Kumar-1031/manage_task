@@ -9,3 +9,9 @@ class FetchUserDataEvent extends UserDataEvent {
   // TODO: implement props
   List<Object?> get props => [];
 }
+
+class ResetFetchUserDataEvent extends UserDataEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}

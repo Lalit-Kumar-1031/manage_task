@@ -41,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
+
     context.read<UserDataBloc>().add(FetchUserDataEvent());
     TokenStorage.getToken("refreshToken").then((value) {
       log("Token ==>$value");

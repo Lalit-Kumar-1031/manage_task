@@ -12,6 +12,7 @@ part 'user_data_state.dart';
 class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
   UserDataBloc() : super(UserDataInitial()) {
     on<FetchUserDataEvent>(fetchUserDataEvent);
+    on<ResetFetchUserDataEvent>(resetFetchUserDataEvent);
   }
 
   FutureOr<void> fetchUserDataEvent(
@@ -44,5 +45,12 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
     } catch (e) {
       emit(UserDataFailure(statusCode: 401));
     }
+  }
+
+  FutureOr<void> resetFetchUserDataEvent(
+    ResetFetchUserDataEvent event,
+    Emitter<UserDataState> emit,
+  ) {
+    emit(UserDataInitial());
   }
 }

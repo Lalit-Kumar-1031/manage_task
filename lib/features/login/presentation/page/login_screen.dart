@@ -1,13 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manage_task/features/common/common_container.dart';
 import 'package:manage_task/features/common/ontap_animation.dart';
+import 'package:manage_task/features/common/utils.dart';
 import 'package:manage_task/features/login/presentation/blocs/login/login_bloc.dart';
 import 'package:manage_task/features/login/presentation/blocs/logout/logout_bloc.dart';
 import 'package:manage_task/features/signup/presentation/page/signup_screen.dart';
 import 'package:manage_task/features/signup/presentation/widgets/custom_text_field.dart';
+import 'package:manage_task/features/user_data/presentation/blocs/user_data/user_data_bloc.dart';
 import 'package:manage_task/features/user_data/presentation/page/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     context.read<LogoutBloc>().add(ResetLogoutUserEvent());
+    context.read<UserDataBloc>().add(ResetFetchUserDataEvent());
     super.initState();
   }
 
@@ -34,10 +35,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state is LoginFailure) {
+            ToastHandler().showErrorToast(
+              "Something went wrong with status code ${state.statusCode}",
+            );
+          }
         },
         builder: (context, state) {
           if (state is LoginSuccess) {
+            context.read<UserDataBloc>().add(FetchUserDataEvent());
             WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (_) => const HomeScreen()),

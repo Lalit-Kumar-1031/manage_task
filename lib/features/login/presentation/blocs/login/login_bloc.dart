@@ -28,7 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       if (response.statusCode == 200) {
-        log("Login Response  =>${response.data}");
+        log("Login Response  =>${event.email} ${response.data}");
         final accessToken = response.data['accessToken'] ?? "";
         final refreshToken = response.data['refreshToken'] ?? "";
 
